@@ -19,6 +19,13 @@ class UserController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function show($id){
+        $user = User::query()->where('id' , $id)->get();
+        return response()->json([
+            $user
+        ], Response::HTTP_OK);
+    }
+
     public function register(Request $request){
         $request->validate([
             'name' =>  'required',

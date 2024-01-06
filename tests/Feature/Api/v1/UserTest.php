@@ -24,6 +24,12 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_get_user(){
+        $user = User::factory()->create();
+        $response = $this->get(route('user.show' , $user->id));
+        $response->assertStatus(200);
+
+    }
     public function test_register_user_validate()
     {
         $response = $this->postJson(route('user.register'));
