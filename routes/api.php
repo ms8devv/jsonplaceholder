@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,4 +30,7 @@ Route::prefix('api/v1')->group(function () {
         Route::post('/logout', [UserController::class , 'logout'])->name('user.logout');
         Route::put('/delete/{id}' , [UserController::class , 'delete'])->name('user.delete');
     });
+
+    // --------- CategoryController Routes ----------
+    Route::get('categories', [CategoryController::class , 'index'])->name('categories');
 });
