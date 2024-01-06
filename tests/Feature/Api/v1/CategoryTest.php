@@ -13,7 +13,7 @@ class CategoryTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function test_get_categories()
     {
         $response = $this->getJson(route('categories'));
 

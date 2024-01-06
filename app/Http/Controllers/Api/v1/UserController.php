@@ -33,15 +33,23 @@ class UserController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        User::query()->create([
-            'name' =>  $request->name ,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),  // if want to use hash the password
-            // 'password' => $request->password,
-        ]);
+        $user = new User();
+        $user->name = $request->name ;
+        $user->email = $request->email ;
+        // $user->password = Hash::make($request->password);  // if want to use hash the password
+        $user->password = $request->password;
+        // $user->save();
+
+        // Registered User
+        // $user = User::query()->where([
+        //     ['email' , $request->email] ,
+        //     ['password' , $request->password]
+        // ])->first();
+        dd($user);
 
         return response()->json([
-            'message' => 'User Created Successfully'
+            $user ,
+            'message' => 'User Register Successfully'
         ], Response::HTTP_CREATED);
 
     }

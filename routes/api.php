@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\v1\CategoryController;
+use App\Http\Controllers\Api\v1\CommentController;
+use App\Http\Controllers\Api\v1\PostController;
 use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +38,9 @@ Route::prefix('api/v1')->group(function () {
     Route::get('/categories', [CategoryController::class , 'index'])->name('categories');
 
     // ----------- PostController Routes -------------
-    Route::resource('/post', UserController::class);
+    Route::resource('/posts', PostController::class);
+
+    // ---------- CommentController Routes ------------
+    Route::resource('/comments', CommentController::class);
 
 });
