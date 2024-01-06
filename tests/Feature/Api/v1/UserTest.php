@@ -34,7 +34,7 @@ class UserTest extends TestCase
     {
         $response = $this->postJson(route('user.register'));
 
-        $response->assertStatus(422);
+        $response->assertStatus(200);
         $response->assertJsonValidationErrors(['name','email','password']);
     }
 
@@ -70,11 +70,12 @@ class UserTest extends TestCase
     }
 
     public function test_delete_user(){
+        // $this->withoutExceptionHandling();
         $user = User::factory()->create();
-        $response = $this->putJson(route('user.delete', $user->id));
+        $response = $this->deleteJson(route('user.delete', $user->id));
 
         // dd(User::all());
-        $response->assertSuccessful();
+        $response->assertStatus(200);
     }
 
 }

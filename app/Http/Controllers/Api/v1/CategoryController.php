@@ -12,8 +12,12 @@ class CategoryController extends Controller
     public function index(){
         $categories = Category::all();
 
-        return response()->json([
-            $categories
-        ], Response::HTTP_OK);
+        return response()->json($categories, Response::HTTP_OK);
+    }
+
+    public function show($id){
+        $category = Category::query()->where('id' , $id)->first();
+
+        return response()->json($category, Response::HTTP_OK);
     }
 }

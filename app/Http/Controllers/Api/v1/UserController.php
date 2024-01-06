@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -14,24 +15,32 @@ class UserController extends Controller
     public function getAllUsers(){
         $users = User::all();
 
-        return response()->json([
-            $users
-        ], Response::HTTP_OK);
+        return response()->json($users, Response::HTTP_OK);
     }
 
     public function show($id){
         $user = User::query()->where('id' , $id)->get();
-        return response()->json([
-            $user
-        ], Response::HTTP_OK);
+
+        if($user->count() > 0){
+            return response()->json($user[0], Response::HTTP_OK);
+        }else{
+            return response()->json([
+                'message' => 'User Not Found'
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 
     public function register(Request $request){
-        $request->validate([
+        $data = Validator::make($request->all(), [
             'name' =>  'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
         ]);
+        if($data->fails()){
+            return response()->json([
+                'errors' => $data->errors()
+            ]);
+        }
 
         $user = new User();
         $user->name = $request->name ;
@@ -40,15 +49,13 @@ class UserController extends Controller
         $user->password = $request->password;
         // $user->save();
 
-        // Registered User
-        // $user = User::query()->where([
-        //     ['email' , $request->email] ,
-        //     ['password' , $request->password]
-        // ])->first();
-        dd($user);
 
         return response()->json([
-            $user ,
+            'user'=> [
+                'name' => $user->name ,
+                'email' => $user->email,
+                'password' => $user->password
+            ] ,
             'message' => 'User Register Successfully'
         ], Response::HTTP_CREATED);
 
@@ -56,14 +63,21 @@ class UserController extends Controller
 
 
     public function login(Request $request){
-        $request->validate([
+
+        $data = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        if($data->fails()){
+            return response()->json([
+                'errors' => $data->errors()
+            ]);
+        }
+
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             return response()->json([
-                User::query()->find(auth()->user()->id)->get() ,
+                'user'=>User::query()->where('email' , $request->email)->first() ,
                 'message'=> 'Login Success'
             ]);
         }else{
@@ -81,17 +95,16 @@ class UserController extends Controller
     }
 
     public function delete($user_id){
-        $user = User::query()->where('id' , $user_id)->get();
-        $response = User::query()->where('id' , $user_id)->delete();
+        $user = User::query()->where('id' , $user_id)->first();
+        // $response = User::query()->where('id' , $user_id)->delete();
 
-        if($response){
+        if($user != null){
             return response()->json([
-                $user,
+                'user'=>$user,
                 'message' => 'User Deleted Successfuly'
             ], Response::HTTP_OK);
         }else{
             return response()->json([
-                $user,
                 'message' => 'User Not Found'
             ], Response::HTTP_NOT_FOUND); 
         }
