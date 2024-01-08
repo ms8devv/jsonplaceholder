@@ -17,11 +17,11 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'title' => fake()->title(),
-            'body' => fake()->sentence(10),
-            'image' => 'test-image' ,
-            'category_id' => 1 ,
-            'user_id' => 1
+            'title' => fake()->jobTitle(),
+            'body' => fake()->paragraph(3),
+            'image' => 'https://media.mehrnews.com/d/2021/03/14/3/3719297.jpg' ,
+            'category_id' => 9 ,
+            'user_id' => 40
         ]; 
     }
 }

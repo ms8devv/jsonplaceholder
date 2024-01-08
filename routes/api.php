@@ -26,12 +26,12 @@ Route::prefix('/v1')->group(function () {
 
     // --------- UserController Routes ------------
     Route::get('/users', [UserController::class , 'getAllUsers' ])->name('users');
+    Route::get('users/{id}',[UserController::class , 'show'])->name('user.show');
+    Route::delete('/users/{id}' , [UserController::class , 'delete'])->name('user.delete');
     Route::prefix('/user')->group(function () {
-        Route::get('/{id}',[UserController::class , 'show'])->name('user.show');
         Route::post('/register' , [UserController::class , 'register'])->name('user.register');
         Route::post('/login' , [UserController::class , 'login'])->name('user.login');
         Route::post('/logout', [UserController::class , 'logout'])->name('user.logout');
-        Route::delete('/delete/{id}' , [UserController::class , 'delete'])->name('user.delete');
     });
 
     // --------- CategoryController Routes ----------
