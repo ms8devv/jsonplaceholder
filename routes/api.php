@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::prefix('/v1')->group(function () {
+Route::prefix('')->group(function () {   // if want to add version
 
     // --------- UserController Routes ------------
     Route::get('/users', [UserController::class , 'getAllUsers' ])->name('users');

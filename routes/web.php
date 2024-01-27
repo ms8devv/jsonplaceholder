@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('index');
+})->name('index');
+Route::get('/contact', [ContactController::class , 'index'] )->name('contact');
+Route::post('/contact-message', [ContactController::class , 'message'] )->name('contact.message');
+
+
+Route::get('/clear-cache', function () {
     return view('welcome');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+    Artisan::call('optimize:clear');
+
 });
